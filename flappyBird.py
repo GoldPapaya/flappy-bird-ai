@@ -178,6 +178,7 @@ def main(genomes, config):
     ge = []
     birds = []
 
+    # for _ implemented because iterator value is unused
     for _, g in genomes:
         net = neat.nn.FeedForwardNetwork.create(g, config)
         nets.append(net)
@@ -211,6 +212,7 @@ def main(genomes, config):
 
         for x, bird in enumerate(birds):
             bird.move()
+            # passive fitness increase for progressing further
             ge[x].fitness += 0.1
 
             output = nets[x].activate((bird.y, abs(bird.y - pipes[pipe_ind].height), abs(bird.y - pipes[pipe_ind].bottom)))
@@ -223,6 +225,7 @@ def main(genomes, config):
         for pipe in pipes:
             for x, bird in enumerate(birds):
                 if pipe.collide(bird):
+                    # if a bird collides with a pipe obstacle, reduce the fitness
                     ge[x].fitness -= 1
                     birds.pop(x)
                     nets.pop(x)
@@ -241,6 +244,7 @@ def main(genomes, config):
         if add_pipe:
             score += 1
             for g in ge:
+                # if a bird clears a pipe obstacle, increase the fitness
                 g.fitness += 2
             pipes.append(Pipe(600))
 
